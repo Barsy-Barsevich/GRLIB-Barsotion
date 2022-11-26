@@ -18,7 +18,7 @@
 ; GR_FRAME (X0,Y0,X1,Y1,R) --------- Рисование скругленных прямоугольников
 ;
 
-.include /home/victor/Desktop/GRLIB/GRLIB.def
+.include GRLIB.def
 
 ;
 ; Функция GR_INI - инициализация библиотеки
