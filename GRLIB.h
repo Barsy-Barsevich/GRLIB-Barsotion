@@ -1,4 +1,4 @@
-.include /home/victor/Desktop/GRLIB/GRLIB.def
+.include GRLIB.def
 .def GR_INI = $0800
 .def GR_RESOLUTION = $0842
 .def GR_START_BUF_ADDR = $0867
