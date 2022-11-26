@@ -1,0 +1,87 @@
+; Установочные константы:
+; Разрядность num_x_sc_bytes. От величины зависит, какой ширины может быть
+; экран, с которым работает библиотека. Максимальная ширина экрана --
+; ((2^fastmul_rotate)-1)*8. Стандартное значение -- $05 (ширина - 248 пикселей),
+; максимальное -- $08 (ширина - 2040 пикселей).
+.def fastmul_rotate = $05
+
+; Переменные-настройки:
+; Разрешение экрана по x и y
+.def number_x_pixels = $9020 ;word
+.def number_y_pixels = $9022 ;word
+; Границы отображаемого. Если точка не поподает в описываемый
+; прямоугольник, она не рисуется
+.def x_sc_right = $9024  ;int
+.def x_sc_left =  $9026  ;int
+.def y_sc_upper = $9028  ;int
+.def y_sc_lower = $902A  ;int
+; Количество байт по горизонтали экрана. number_x_pixels//8.
+.def num_x_sc_bytes = $902C ;byte
+; Адрес начала видеобуфера в памяти
+.def start_buf_addr = $9002 ;word
+; Адрес начала таблицы шрифтов
+.def font_const = $902D ;word
+; Расстояние между символами
+.def gap_const = $902F ;byte
+; Максимальная высота и ширина символа соответственно
+.def vert_sym = $9030 ;byte
+.def hor_sym =  $9032 ;byte
+; Стиль пересечений. Что рисовать, если пиксель уже закрашен?
+; Комбинации команд:
+; $00B6 -- закрашивание пикселя в любом случае
+; $00AE -- закрашивание, если очищен; очистка, если закрашен
+; $A62F -- очистка пикселя в любом случае
+.def intersection_style = $9088 ;byte
+
+; Входные переменные print_dot
+.def x_dot = $9034 ;int
+.def y_dot = $9036 ;int
+; Входные переменные wrsym
+.def x_wrsym = $9038 ;int
+.def y_wrsym = $903A ;int
+.def now_sym = $903C ;char
+; Входные переменные GR_STOPT и GR_STMONO
+.def x_str = $903D ;int
+.def y_str = $903F ;int
+.def gr_stopt_addr =   $9041 ;word
+.def gr_stmono_addr =  $9043 ;word
+.def gr_stopt_index =  $9045 ;byte
+.def gr_stmono_index = $9046 ;byte
+; Входные переменные GR_LINE
+.def x0_line = $9047 ;int
+.def x1_line = $9049 ;int
+.def y0_line = $904B ;int
+.def y1_line = $904D ;int
+; Входные переменные GR_CIRCLE и GR_FRAME
+.def x_circle = $904F ;int
+.def y_circle = $9051 ;int
+.def radius =   $9053 ;int
+.def x0_frame = $9055 ;int
+.def x1_frame = $9057 ;int
+.def y0_frame = $9059 ;int
+.def y1_frame = $905B ;int
+
+; Локальные переменные
+.def xk = $905D ;int
+.def vert_count = $905F ;byte
+.def hor_count =  $9060 ;byte
+.def wrsym_bool_err = $9061 ;byte
+.def dx = $9062 ;int
+.def dy = $9064 ;int
+.def dx_puoli = $9066 ;int
+.def dy_puoli = $9068 ;int
+.def var_err = $906A ;int
+.def xplus = $906C ;int
+.def yplus = $906E ;int
+.def x_sector = $9070 ;int
+.def y_sector = $9072 ;int
+.def x_and_xplus_quar = $9074 ;int
+.def y_and_xplus_quar = $9076 ;int
+.def sector_ph = $9078 ;int
+.def sector_pd = $907A ;int
+.def sector_pv = $907C ;int
+.def r_quar = $907E ;int
+.def x =  $9080 ;int
+.def y =  $9082 ;int
+.def xl = $9084 ;int
+.def yl = $9086 ;int

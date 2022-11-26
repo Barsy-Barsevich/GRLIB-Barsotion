@@ -1,0 +1,122 @@
+
+; Универсальный тест графической библиотеки
+; Начальный адрес - $0000
+
+.org $0000
+; load
+.include /home/victor/Desktop/AFS2/AFS2.h
+.include /home/victor/Desktop/GRLIB/GRLIB.h
+lxi sp,$FFFF
+mvi a,$88
+out $03
+
+call GR_INI
+
+call ST7920_INI
+call BUF_CLR
+call PRINT_BUF
+
+
+; Точки
+lxi h,$0010
+push h
+lxi h,$0010
+push h
+call GR_DOT
+
+lxi h,$0010
+push h
+lxi h,$0012
+push h
+call GR_DOT
+
+; symbols
+lxi h,$0005
+push h
+lxi h,$0000
+push h
+mvi a,$41
+push psw
+call GR_WRSYM
+
+; stropt
+lxi h,string
+push h
+lxi h,$0018
+push h
+lxi h,$0000
+push h
+call GR_STOPT
+
+; strmono
+lxi h,$3800
+shld font_const
+lxi h,string
+push h
+lxi h,$0018
+push h
+lxi h,$0008
+push h
+call GR_STMONO
+
+string:
+.db $09
+.db $42
+.db $61
+.db $72
+.db $73
+.db $6F
+.db $74
+.db $69
+.db $6F
+.db $6E
+
+
+; line
+lxi h,$0003
+push h
+lxi h,$0014
+push h
+lxi h,$0065
+push h
+lxi h,$003A
+push h
+call GR_LINE
+
+; circle
+lxi h,$0020
+push h
+lxi h,$0030
+push h
+lxi h,$001E
+push h
+call GR_CIRCLE
+
+; frame
+lxi h,$0030
+push h
+lxi h,$0022
+push h
+lxi h,$007F
+push h
+lxi h,$003F
+push h
+lxi h,$0008
+push h
+call GR_FRAME
+
+lxi h,$0032
+push h
+lxi h,$0024
+push h
+lxi h,$007D
+push h
+lxi h,$003D
+push h
+lxi h,$0006
+push h
+call GR_FRAME
+
+call PRINT_BUF
+hlt
+

@@ -1,0 +1,177 @@
+KEYWORDS:
+
+--------------------------------------------------------
+(1) Инициализация библиотеки
+GR_INI ()
+
+Пример:
+call GR_INI
+
+--------------------------------------------
+(2) Установка разрешения экрана
+GR_RESOLUTION (X(int),Y(int))
+
+Пример:
+lxi h,$0080
+push h
+lxi h,$0040
+push h
+call GR_RESOLUTION
+
+--------------------------------------------------------
+(3) Установка начального адреса видеобуфера
+GR_START_BUF_ADDR (word)
+
+Пример:
+lxi h,$F800
+push h
+call GR_START_BUF_ADDR
+
+--------------------------------------------------------
+(4) Установка границ отображаемого
+GR_BORDER (RIGHT(int),LEFT(int),UP(int),DOWN(int))
+
+Пример:
+lxi h,$0080 ;правая - 128
+push h
+lxi h,$0000 ;левая - 0
+push h
+lxi h,$0000 ;верхняя - 0
+push h
+lxi h,$0040 ;нижняя - 64
+push h
+call GR_BORDER
+
+--------------------------------------------------------
+(5) Установка стиля пересечений
+GR_INTERSECTION_STYLE (byte)
+
+Пример:
+mvi a,$00
+push psw
+call GR_INTERSECTION_STYLE
+
+--------------------------------------------------------
+(6) Установка начального адреса таблицы шрифтов
+GR_FONT (ADDR(word))
+
+Пример:
+lxi h,$1800
+push h
+call GR_FONT
+
+--------------------------------------------------------
+(7) Установка ширины и высоты символа
+GR_SYM_PARAMETERS (hor(byte),vert(byte))
+
+Пример:
+mvi a,$06
+push psw
+mvi a,$08
+push psw
+call GR_SYM_PARAMETERS
+
+--------------------------------------------------------
+(8) Установка расстояния между символами
+GR_GAP (GAP(byte))
+
+Пример:
+mvi a,$01
+push psw
+call GR_GAP
+
+--------------------------------------------------------
+(9) Рисование точки
+GR_DOT (X(int),Y(int))
+
+Пример:
+lxi h,$0010
+push h
+lxi h,$0010
+push h
+call GR_DOT
+
+--------------------------------------------------------
+(10) Рисование буквы
+GR_WRSYM (X(int),Y(int),SYM(char))
+
+Пример:
+lxi h,$0005
+push h
+lxi h,$0000
+push h
+mvi a,$41
+push psw
+call GR_WRSYM
+
+--------------------------------------------------------
+(11) Рисование строки пропорционального текста
+GR_STOPT (ADDR(word),X(int),Y(int))
+
+Пример:
+lxi h,string
+push h
+lxi h,$0018
+push h
+lxi h,$0000
+push h
+call GR_STOPT
+
+--------------------------------------------------------
+(12) Рисование строки текста-моно
+GR_STMONO (ADDR(word),X(int),Y(int))
+
+Пример:
+lxi h,string
+push h
+lxi h,$0018
+push h
+lxi h,$0008
+push h
+call GR_STMONO
+
+--------------------------------------------------------
+(13) Рисование линий
+GR_LINE (X0(int),Y0(int),X1(int),Y1(int))
+
+Пример:
+lxi h,$0003
+push h
+lxi h,$0014
+push h
+lxi h,$0065
+push h
+lxi h,$003A
+push h
+call GR_LINE
+
+--------------------------------------------------------
+(14) Рисование окружностей
+GR_CIRCLE (X(int),Y(int),R(int))
+
+Пример:
+lxi h,$0020
+push h
+lxi h,$0030
+push h
+lxi h,$001E
+push h
+call GR_CIRCLE
+
+--------------------------------------------------------
+(15) Рисование скругленных прямоугольников
+GR_FRAME (X0(int),Y0(int),X1(int),Y1(int),R(int))
+
+Пример:
+lxi h,$0030
+push h
+lxi h,$0022
+push h
+lxi h,$007F
+push h
+lxi h,$003F
+push h
+lxi h,$0008
+push h
+call GR_FRAME
+
