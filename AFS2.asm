@@ -42,7 +42,7 @@
 
 
 
-.include /home/victor/Desktop/AFS2/AFS2.def
+.include AFS2.def
 
 ;
 ; Функция MacroDelay - программная задержка
