@@ -138,19 +138,19 @@ ret
 
 lcdCommOut:
 mov c,a
-in 02H
+in port_display_B
 ani F8H
-out 02H
+out port_display_B
 mov a,c
-out 00H
-in 02H
+out port_display_A
+in port_display_B
 inr a
-out 02H
+out port_display_B
 mvi a,01H
 call MacroDelay
-in 02H
+in port_display_B
 dcr a
-out 02H
+out port_display_B
 ret
 
 
@@ -185,20 +185,20 @@ ret
 
 lcdDataOut:
 mov c,a
-in 02H
+in port_display_B
 ani F8H
 adi 04H
-out 02H
+out port_display_B
 mov a,c
-out 00H
-in 02H
+out port_display_A
+in port_display_B
 inr a
-out 02H
+out port_display_B
 mvi a,01H
 call MacroDelay
-in 02H
+in port_display_B
 ani F8H
-out 02H
+out port_display_B
 ret
 
 
