@@ -4,8 +4,8 @@
 
 .org $0000
 ; load
-.include /home/victor/Desktop/AFS2/AFS2.h
-.include /home/victor/Desktop/GRLIB/GRLIB.h
+.include AFS2.h
+.include GRLIB.h
 lxi sp,$FFFF
 mvi a,$88
 out port_ini
