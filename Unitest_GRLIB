@@ -8,7 +8,7 @@
 .include /home/victor/Desktop/GRLIB/GRLIB.h
 lxi sp,$FFFF
 mvi a,$88
-out $03
+out port_ini
 
 call GR_INI
 
