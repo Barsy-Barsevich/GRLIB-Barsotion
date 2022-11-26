@@ -123,7 +123,7 @@ push h
 call GR_LINE
 hlt
 
-Также примеры можно подсмотреть в файле Unitest_GRLIB.
+Также примеры можно подсмотреть в файлах Keywords или Unitest_GRLIB.
 
 
 (6) Стиль пересечений
