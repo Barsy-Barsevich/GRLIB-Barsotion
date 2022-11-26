@@ -1,4 +1,4 @@
-.include /home/victor/Desktop/AFS2/AFS2.def
+.include AFS2.def
 .def MacroDelay = $1500
 .def Delay = $1506
 .def lcdCommOut = $151A
