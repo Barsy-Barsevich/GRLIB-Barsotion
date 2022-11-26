@@ -1,6 +1,6 @@
 .def port_ini = $03
-.def port_display_A = 
-.def port_display_B = 
+.def port_display_A = $00
+.def port_display_B = $02
 
 .def disp_addr_x =    $9000 ;byte
 .def disp_addr_y =    $9001 ;byte
