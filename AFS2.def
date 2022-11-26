@@ -1,0 +1,17 @@
+.def disp_addr_x =    $9000 ;byte
+.def disp_addr_y =    $9001 ;byte
+.def start_buf_addr = $9002 ;word
+.def div16_srem =     $9004 ;byte
+.def div16_squot =    $9005 ;byte
+.def div16_count =    $9006 ;byte
+.def strcmp_lens1 =   $9007 ;byte
+.def strcmp_lens2 =   $9008 ;byte
+.def concat_s1adr =   $9009 ;word
+.def concat_s1len =   $900B ;byte
+.def concat_s2len =   $900C ;byte
+.def concat_strgov =  $900D ;byte
+.def pos_string =     $900E ;word
+.def pos_substg =     $9010 ;word
+.def pos_slen =       $9012 ;byte
+.def pos_sublen =     $9013 ;byte
+.def pos_index =      $9014 ;byte
