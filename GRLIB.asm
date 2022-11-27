@@ -19,6 +19,7 @@
 ;
 
 .include GRLIB.def
+.include AFS2.h
 
 ;
 ; Функция GR_INI - инициализация библиотеки
