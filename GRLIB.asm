@@ -134,7 +134,6 @@ GR_INI:
     lxi     h,$0040
     push    h
     call    GR_RESOLUTION
-
 ; Устанавливаем границы
 ; границы по умолчанию:
     lxi     h,$0080 ;правая - 128
@@ -146,13 +145,11 @@ GR_INI:
     lxi     h,$0040 ;нижняя - 64
     push    h
     call    GR_BORDER
-
 ; Устанавливаем стиль пересечений
 ; по умолчанию -- закрашивание в любом случае
     mvi     a,$00
     push    psw
     call    GR_INTERSECTION_STYLE
-
 ; Устанавливаем ширину и высоту символа
 ; по умолчанию ширина - 6; высота - 8
     mvi     a,$06
@@ -160,18 +157,15 @@ GR_INI:
     mvi     a,$08
     push    psw
     call    GR_SYM_PARAMETERS
-
 ; Устанавливаем расстояние между символами
 ; по умолчанию расстояние - 1 пиксель
     mvi     a,$01
     push    psw
     call    GR_GAP
-
 ; Шрифт по умолчанию -- Standart Saluan, $1800
     lxi     h,$1800
     push    h
     call    GR_FONT
-
 ; Адрес буфера по умолчанию -- $F800
     lxi     h,$F800
     push    h
@@ -304,7 +298,6 @@ GR_DOT:
     pop     h
     shld    x
     push    d
-
 PRINT_DOT:
     ; test x & y
     lhld    x_sc_right
@@ -327,7 +320,6 @@ PRINT_DOT:
     xchg
     call    CMP16
     jm      print_dot_err
-
 ; Умножение y на num_x_sc_bytes. Результат в DE
 ; Если равно 10H, ускоренно сдвигаем. Иначе - быстрое умножение
 ; DE <- y
@@ -335,7 +327,6 @@ PRINT_DOT:
     lda     num_x_sc_bytes
     cpi     10H
     jnz     print_dot__3
-
 ; Сдвиг на 4 разряда влево
     mvi     c,$04
 print_dot__4:
@@ -350,13 +341,11 @@ print_dot__4:
     jnz     print_dot__4
 ; В конец секции умножения
     jmp     print_dot__5
-
 ; Быстрое умножение
 print_dot__3:
     lxi     h,$0000
     mvi     c,fastmul_rotate
     mov     b,a
-
 print_dot__1:
 ; B >>
     mov     a,b
@@ -399,20 +388,17 @@ print_dot__5:
     mov     b,a
     dcr     c
     jnz     print_dot_cycle1
-
 ; a - b
     rlc
     rlc
     rlc
     mov     b,a
-
 ; DE <- (y * num_x_sc_bytes) + (x//8) + start_buf_addr
     dad     d
     xchg
     lhld    start_buf_addr
     dad     d
     xchg
-
 ; BITSET (7-(x%8))
     mvi     a,07H
     sub     b
@@ -541,22 +527,18 @@ wrsym_cycle_get_word:
     lhld    font_const
     dad     d
     mov     a,m
-
 ; paint 1 string of symbol
 ; A - string of symbol
-
 wrsym_cycle1:
     add     a
     push    psw
     jnc     wrsym_1
 ; If carry, paint a dot
 ; save A in stack
-
 ; call PRINT_DOT(x:y)
     call    PRINT_DOT
 ; If addressing error, go to print_dot_err
     ;jc      wrsym_err
-
 ; If x>(xk-1), save (x+1) as xk
 ; DE <- x
     lhld    x
@@ -678,13 +660,10 @@ GR_STOPT:
     shld    xk
     lhld    y_str
     shld    yl
-    
 ; index <= -1
     mvi     a,$FF
     sta     gr_stopt_index
-
 gr_stopt_cycle:
-
 ; IF (index+1 == len) -> ret
     lhld    gr_stopt_addr
     lda     gr_stopt_index
@@ -716,7 +695,6 @@ gr_stopt_cycle:
     mov     h,a
     shld    xl
     jmp     gr_stopt_cycle
-
 ; Else, (A!=$20) ->
 gr_stopt_1:
     sta     now_sym
