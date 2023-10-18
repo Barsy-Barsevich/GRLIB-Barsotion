@@ -484,7 +484,6 @@ GR_WRSYM:
     pop     h
     shld    xl
     push    d
-
 WRSYM_inside:
 ; vert_count <- 0
     xra     a
@@ -644,7 +643,6 @@ wrsym_3:
 ;
 ; Начало кода:
 
-
 GR_STOPT:
     pop     d
     pop     h
@@ -763,7 +761,6 @@ gr_stopt_1:
 ;
 ; Начало кода:
 
-
 GR_STMONO:
     pop     d
     pop     h
@@ -865,7 +862,6 @@ gr_stmono_cycle:
 ; Время выполнения:  тактов
 ;
 ; Начало кода:
-
 
 GR_LINE:
     pop     d
