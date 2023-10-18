@@ -286,7 +286,7 @@ GR_GAP:
 ;  - BITSET
 ;  - CMP16
 ;
-; Длина: 106 байтов
+; Длина: 175 байтов
 ; Время выполнения: ~1930 тактов
 ;
 ; Начало кода:
@@ -375,7 +375,7 @@ print_dot__5:
     ora     a
     mvi     b,00H
     mvi     c,03H
-    print_dot_cycle1:
+print_dot_cycle1:
     mov     a,h
     rar
     mov     h,a
@@ -470,7 +470,7 @@ print_dot_err:
 ;  - PRINT_DOT
 ;  - CMP16
 ;
-; Длина:  байта
+; Длина: 156 байт
 ; Время выполнения: ?
 ;
 ; Начало кода:
@@ -554,22 +554,22 @@ wrsym_cycle1:
     shld    xk
 ; DE - x
 wrsym_1:
-    ; x += 1
+; x += 1
     lhld    x
     inx     h
     shld    x
-    ; get A from stack
+; get A from stack
     pop     psw
-    ; out condition
+; out condition
     lxi     h,hor_count
     dcr     m
     jnz     wrsym_cycle1
 wrsym_2:
-    ; y += 1
+; y += 1
     lhld    y
     inx     h
     shld    y
-    ; If vert_count == ver
+; If vert_count == ver
     lda     vert_count
     mov     b,a
     inr     b
@@ -638,7 +638,7 @@ wrsym_3:
 ;  - WRSYM
 ;  - CMP16
 ;
-; Длина:  байта
+; Длина: 103 байта
 ; Время выполнения: ?
 ;
 ; Начало кода:
