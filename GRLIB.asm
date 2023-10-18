@@ -129,142 +129,141 @@
 
 GR_INI:
 ; Установка разрешения экрана, num_x_sc_bytes
-lxi h,$0080
-push h
-lxi h,$0040
-push h
-call GR_RESOLUTION
+    lxi     h,$0080
+    push    h
+    lxi     h,$0040
+    push    h
+    call    GR_RESOLUTION
 
 ; Устанавливаем границы
 ; границы по умолчанию:
-lxi h,$0080 ;правая - 128
-push h
-lxi h,$0000 ;левая - 0
-push h
-lxi h,$0000 ;верхняя - 0
-push h
-lxi h,$0040 ;нижняя - 64
-push h
-call GR_BORDER
+    lxi     h,$0080 ;правая - 128
+    push    h
+    lxi     h,$0000 ;левая - 0
+    push    h
+    lxi     h,$0000 ;верхняя - 0
+    push    h
+    lxi     h,$0040 ;нижняя - 64
+    push    h
+    call    GR_BORDER
 
 ; Устанавливаем стиль пересечений
 ; по умолчанию -- закрашивание в любом случае
-mvi a,$00
-push psw
-call GR_INTERSECTION_STYLE
+    mvi     a,$00
+    push    psw
+    call    GR_INTERSECTION_STYLE
 
 ; Устанавливаем ширину и высоту символа
 ; по умолчанию ширина - 6; высота - 8
-mvi a,$06
-push psw
-mvi a,$08
-push psw
-call GR_SYM_PARAMETERS
+    mvi     a,$06
+    push    psw
+    mvi     a,$08
+    push    psw
+    call    GR_SYM_PARAMETERS
 
 ; Устанавливаем расстояние между символами
 ; по умолчанию расстояние - 1 пиксель
-mvi a,$01
-push psw
-call GR_GAP
+    mvi     a,$01
+    push    psw
+    call    GR_GAP
 
 ; Шрифт по умолчанию -- Standart Saluan, $1800
-lxi h,$1800
-push h
-call GR_FONT
+    lxi     h,$1800
+    push    h
+    call    GR_FONT
 
 ; Адрес буфера по умолчанию -- $F800
-lxi h,$F800
-push h
-call GR_START_BUF_ADDR
-ret
-
+    lxi     h,$F800
+    push    h
+    call    GR_START_BUF_ADDR
+    ret
 
 
 GR_RESOLUTION:
-pop d
-pop h
-shld number_y_pixels
-pop h
-shld number_x_pixels
-push d
+    pop     d
+    pop     h
+    shld    number_y_pixels
+    pop     h
+    shld    number_x_pixels
+    push    d
 ; Установка num_x_sc_bytes
 ; num_x_sc_bytes = number_x_pixels//8
-mvi c,03H
-xra a
+    mvi     c,03H
+    xra     a
 gr_ini_1:
-mov b,a
-mov a,h
-rar
-mov h,a
-mov a,l
-rar
-mov l,a
-mov a,b
-ral
-dcr c
-jnz gr_ini_1
+    mov     b,a
+    mov     a,h
+    rar
+    mov     h,a
+    mov     a,l
+    rar
+    mov     l,a
+    mov     a,b
+    ral
+    dcr     c
+    jnz     gr_ini_1
 ; Если остаток не равен 0, прибавляем 1
-mov a,b
-ora a
-jz gr_ini_2
-inx h
+    mov     a,b
+    ora     a
+    jz      gr_ini_2
+    inx     h
 gr_ini_2:
-mov a,l
-sta num_x_sc_bytes
-ret
+    mov     a,l
+    sta     num_x_sc_bytes
+    ret
 
 
 GR_START_BUF_ADDR:
-pop d
-pop h
-shld start_buf_addr
-xchg
-pchl
+    pop     d
+    pop     h
+    shld    start_buf_addr
+    xchg
+    pchl
 
 
 GR_BORDER:
-pop d
-pop h
-shld y_sc_lower ;(int) ; нижняя граница
-pop h
-shld y_sc_upper ;(int) ; верхняя граница
-pop h
-shld x_sc_left  ;(int) ; левая граница
-pop h
-shld x_sc_right ;(int) ; правая граница
-xchg
-pchl
+    pop     d
+    pop     h
+    shld    y_sc_lower ;(int) ; нижняя граница
+    pop     h
+    shld    y_sc_upper ;(int) ; верхняя граница
+    pop     h
+    shld    x_sc_left  ;(int) ; левая граница
+    pop     h
+    shld    x_sc_right ;(int) ; правая граница
+    xchg
+    pchl
 
 
 GR_INTERSECTION_STYLE:
-pop h
-pop psw
-sta intersection_style
-pchl
+    pop     h
+    pop     psw
+    sta     intersection_style
+    pchl
 
 
 GR_FONT:
-pop d
-pop h
-shld font_const
-xchg
-pchl
+    pop     d
+    pop     h
+    shld    font_const
+    xchg
+    pchl
 
 
 GR_SYM_PARAMETERS:
-pop h
-pop psw
-sta vert_sym
-pop psw
-sta hor_sym
-pchl
+    pop     h
+    pop     psw
+    sta     vert_sym
+    pop     psw
+    sta     hor_sym
+    pchl
 
 
 GR_GAP:
-pop h
-pop psw
-sta gap_const
-pchl
+    pop     h
+    pop     psw
+    sta     gap_const
+    pchl
 
 
 
@@ -299,156 +298,151 @@ pchl
 ; Начало кода:
 
 GR_DOT:
-pop d
-pop h
-shld y
-pop h
-shld x
-push d
+    pop     d
+    pop     h
+    shld    y
+    pop     h
+    shld    x
+    push    d
 
 PRINT_DOT:
-; test x & y
-lhld x_sc_right
-xchg
-lhld x
-call CMP16
-jp print_dot_err
-xchg
-lhld x_sc_left
-xchg
-call CMP16
-jm print_dot_err
-lhld y_sc_lower
-xchg
-lhld y
-call CMP16
-jp print_dot_err
-xchg
-lhld y_sc_upper
-xchg
-call CMP16
-jm print_dot_err
+    ; test x & y
+    lhld    x_sc_right
+    xchg
+    lhld    x
+    call    CMP16
+    jp      print_dot_err
+    xchg
+    lhld    x_sc_left
+    xchg
+    call    CMP16
+    jm      print_dot_err
+    lhld    y_sc_lower
+    xchg
+    lhld    y
+    call    CMP16
+    jp      print_dot_err
+    xchg
+    lhld    y_sc_upper
+    xchg
+    call    CMP16
+    jm      print_dot_err
 
 ; Умножение y на num_x_sc_bytes. Результат в DE
 ; Если равно 10H, ускоренно сдвигаем. Иначе - быстрое умножение
 ; DE <- y
-xchg
-lda num_x_sc_bytes
-cpi 10H
-jnz print_dot__3
+    xchg
+    lda     num_x_sc_bytes
+    cpi     10H
+    jnz     print_dot__3
 
 ; Сдвиг на 4 разряда влево
-mvi c,$04
+    mvi     c,$04
 print_dot__4:
-ora a
-mov a,e
-ral
-mov e,a
-mov a,d
-ral
-mov d,a
-dcr c
-jnz print_dot__4
+    ora     a
+    mov     a,e
+    ral
+    mov     e,a
+    mov     a,d
+    ral
+    mov     d,a
+    dcr     c
+    jnz     print_dot__4
 ; В конец секции умножения
-jmp print_dot__5
+    jmp     print_dot__5
 
 ; Быстрое умножение
 print_dot__3:
-lxi h,$0000
-mvi c,fastmul_rotate
-mov b,a
+    lxi     h,$0000
+    mvi     c,fastmul_rotate
+    mov     b,a
 
 print_dot__1:
 ; B >>
-mov a,b
-rar
-mov b,a
+    mov     a,b
+    rar
+    mov     b,a
 ; IF 1, hl+=de
-jnc print_dot__2
-dad d
+    jnc     print_dot__2
+    dad     d
 print_dot__2:
 ; DE <<
-ora a
-mov a,e
-ral
-mov e,a
-mov a,d
-ral
-mov d,a
-dcr c
-jnz print_dot__1
+    ora     a
+    mov     a,e
+    ral
+    mov     e,a
+    mov     a,d
+    ral
+    mov     d,a
+    dcr     c
+    jnz     print_dot__1
 ; DE <- result
-xchg
+    xchg
 print_dot__5:
-
 ; get x//8 & x%8
 ; HL <- x//8
 ; B <- x%8
-lhld x
-ora a
-mvi b,00H
-mvi c,03H
-print_dot_cycle1:
-mov a,h
-rar
-mov h,a
-mov a,l
-rar
-mov l,a
-mov a,b
+    lhld    x
+    ora     a
+    mvi     b,00H
+    mvi     c,03H
+    print_dot_cycle1:
+    mov     a,h
+    rar
+    mov     h,a
+    mov     a,l
+    rar
+    mov     l,a
+    mov     a,b
 ; ! rar
-rar
-mov b,a
-dcr c
-jnz print_dot_cycle1
+    rar
+    mov     b,a
+    dcr     c
+    jnz     print_dot_cycle1
 
 ; a - b
-rlc
-rlc
-rlc
-mov b,a
+    rlc
+    rlc
+    rlc
+    mov     b,a
 
 ; DE <- (y * num_x_sc_bytes) + (x//8) + start_buf_addr
-dad d
-xchg
-lhld start_buf_addr
-dad d
-xchg
+    dad     d
+    xchg
+    lhld    start_buf_addr
+    dad     d
+    xchg
 
 ; BITSET (7-(x%8))
-mvi a,07H
-sub b
-mvi b,00H
-call BITSET
-
-xchg
-
-mov b,a
-lda intersection_style
-ora a
-mov a,b
+    mvi     a,07H
+    sub     b
+    mvi     b,00H
+    call    BITSET
+    xchg
+    mov     b,a
+    lda     intersection_style
+    ora     a
+    mov     a,b
 ; Если == 0: закрашивание пикселя в любом случае
-jz print_dot_i_s_1
+    jz      print_dot_i_s_1
 ; Если == 1: закрашивание, если очищен; очистка, если закрашен
-jpo print_dot_i_s_3
+    jpo     print_dot_i_s_3
 ; Если == 2: очистка пикселя в любом случае
-cma
-ana m
-jmp print_dot_i_s_2
+    cma
+    ana     m
+    jmp     print_dot_i_s_2
 print_dot_i_s_3:
-xra m
-jmp print_dot_i_s_2
+    xra     m
+    jmp     print_dot_i_s_2
 print_dot_i_s_1:
-ora m
+    ora     m
 print_dot_i_s_2:
-
-mov m,a
-ret
-
+    mov     m,a
+    ret
 ; addressing error
 print_dot_err:
-stc
-ret
+    stc
+    ret
 
 
 ;
@@ -496,139 +490,125 @@ ret
 ; Начало кода:
 
 GR_WRSYM:
-pop d
-pop psw
-sta now_sym
-pop h
-shld yl
-pop h
-shld xl
-push d
+    pop     d
+    pop     psw
+    sta     now_sym
+    pop     h
+    shld    yl
+    pop     h
+    shld    xl
+    push    d
 
 WRSYM_inside:
 ; vert_count <- 0
-xra a
-sta vert_count
-
+    xra     a
+    sta     vert_count
 ; wrsym_bool_err <- 0
-sta wrsym_bool_err
-
+    sta     wrsym_bool_err
 ; Copying enter var yl to local y
-lhld yl
-shld y
-
+    lhld    yl
+    shld    y
 wrsym_cycle2:
-
 ; hor_count <- hor_sym
-lda hor_sym
-sta hor_count
-
+    lda     hor_sym
+    sta     hor_count
 ; Copying enter var xl to local x
-lhld xl
-shld x
-
+    lhld    xl
+    shld    x
 ; get the word
 ; A <- string of symbol
-lda vert_count
-mov b,a
-mvi h,$00
-mvi c,$03
-lda now_sym
-ora a
+    lda     vert_count
+    mov     b,a
+    mvi     h,$00
+    mvi     c,$03
+    lda     now_sym
+    ora     a
 wrsym_cycle_get_word:
-ral
-mov l,a
-mov a,h
-ral
-mov h,a
-mov a,l
-dcr c
-jnz wrsym_cycle_get_word
-add b
-mov l,a
-mvi a,$00
-adc h
-mov h,a
-xchg
-lhld font_const
-dad d
-mov a,m
+    ral
+    mov     l,a
+    mov     a,h
+    ral
+    mov     h,a
+    mov     a,l
+    dcr     c
+    jnz     wrsym_cycle_get_word
+    add     b
+    mov     l,a
+    mvi     a,$00
+    adc     h
+    mov     h,a
+    xchg
+    lhld    font_const
+    dad     d
+    mov     a,m
 
 ; paint 1 string of symbol
 ; A - string of symbol
 
 wrsym_cycle1:
-add a
-push psw
-jnc wrsym_1
+    add     a
+    push    psw
+    jnc     wrsym_1
 ; If carry, paint a dot
 ; save A in stack
 
 ; call PRINT_DOT(x:y)
-call PRINT_DOT
+    call    PRINT_DOT
 ; If addressing error, go to print_dot_err
-;jc wrsym_err
+    ;jc      wrsym_err
 
 ; If x>(xk-1), save (x+1) as xk
 ; DE <- x
-lhld x
-xchg
+    lhld    x
+    xchg
 ; HL <- xk-1
-lhld xk
-dcx h
-call CMP16
-
+    lhld    xk
+    dcx     h
+    call    CMP16
 ; If S==1, then int DE > int HL
-jp wrsym_1
+    jp      wrsym_1
 ; save (x+1) as xk
-xchg
-inx h
-shld xk
-
+    xchg
+    inx     h
+    shld    xk
 ; DE - x
 wrsym_1:
-; x += 1
-lhld x
-inx h
-shld x
-
-; get A from stack
-pop psw
-
-; out condition
-lxi h,hor_count
-dcr m
-jnz wrsym_cycle1
-
+    ; x += 1
+    lhld    x
+    inx     h
+    shld    x
+    ; get A from stack
+    pop     psw
+    ; out condition
+    lxi     h,hor_count
+    dcr     m
+    jnz     wrsym_cycle1
 wrsym_2:
-; y += 1
-lhld y
-inx h
-shld y
-
-; If vert_count == ver
-lda vert_count
-mov b,a
-inr b
-lda vert_sym
-cmp b
-jz wrsym_3
-mov a,b
-sta vert_count
-jmp wrsym_cycle2
-
+    ; y += 1
+    lhld    y
+    inx     h
+    shld    y
+    ; If vert_count == ver
+    lda     vert_count
+    mov     b,a
+    inr     b
+    lda     vert_sym
+    cmp     b
+    jz      wrsym_3
+    mov     a,b
+    sta     vert_count
+    jmp     wrsym_cycle2
 wrsym_err:
-pop h
-mvi a,$80
-sta wrsym_bool_err
-jmp wrsym_2
-
+    pop     h
+    mvi     a,$80
+    sta     wrsym_bool_err
+    jmp     wrsym_2
 wrsym_3:
-lda wrsym_bool_err
-ora a
-rz
-stc
-ret
+    lda     wrsym_bool_err
+    ora     a
+    rz
+    stc
+    ret
 
 
 ;
@@ -684,79 +664,74 @@ ret
 
 
 GR_STOPT:
-pop d
-pop h
-shld y_str
-pop h
-shld x_str
-pop h
-shld gr_stopt_addr
-push d
-
+    pop     d
+    pop     h
+    shld    y_str
+    pop     h
+    shld    x_str
+    pop     h
+    shld    gr_stopt_addr
+    push    d
 ; xk <= xl
-lhld x_str
-shld xl
-shld xk
-
-lhld y_str
-shld yl
-
+    lhld    x_str
+    shld    xl
+    shld    xk
+    lhld    y_str
+    shld    yl
+    
 ; index <= -1
-mvi a,$FF
-sta gr_stopt_index
+    mvi     a,$FF
+    sta     gr_stopt_index
 
 gr_stopt_cycle:
 
 ; IF (index+1 == len) -> ret
-lhld gr_stopt_addr
-lda gr_stopt_index
-inr a
-sta gr_stopt_index
-cmp m
-rz
-
+    lhld    gr_stopt_addr
+    lda     gr_stopt_index
+    inr     a
+    sta     gr_stopt_index
+    cmp     m
+    rz
 ; Получаем код символа
 ; A <= M(addr+index+1)
-inr a
-add l
-mov l,a
-mvi a,$00
-adc h
-mov h,a
-mov a,m
-
+    inr     a
+    add     l
+    mov     l,a
+    mvi     a,$00
+    adc     h
+    mov     h,a
+    mov     a,m
 ; Если пробел, разбираем отдельно
 ; IF (A==$20) ->
-cpi $20
-jnz gr_stopt_1
+    cpi     $20
+    jnz     gr_stopt_1
 ; xl = xl + 4 + gap_const
-lhld xl
-lda gap_const
-adi $04
-add l
-mov l,a
-mvi a,$00
-adc h
-mov h,a
-shld xl
-jmp gr_stopt_cycle
+    lhld    xl
+    lda     gap_const
+    adi     $04
+    add     l
+    mov     l,a
+    mvi     a,$00
+    adc     h
+    mov     h,a
+    shld    xl
+    jmp     gr_stopt_cycle
 
 ; Else, (A!=$20) ->
 gr_stopt_1:
-sta now_sym
-call WRSYM_inside
+    sta     now_sym
+    call    WRSYM_inside
 ; IF (wrsym error) -> ret
-;rc
-
-lhld xk
-lda gap_const
-add l
-mov l,a
-mvi a,$00
-adc h
-mov h,a
-shld xl
-jmp gr_stopt_cycle
+    ;rc
+    lhld    xk
+    lda     gap_const
+    add     l
+    mov     l,a
+    mvi     a,$00
+    adc     h
+    mov     h,a
+    shld    xl
+    jmp     gr_stopt_cycle
 
 
 ;
@@ -812,66 +787,58 @@ jmp gr_stopt_cycle
 
 
 GR_STMONO:
-pop d
-pop h
-shld y_str
-pop h
-shld x_str
-pop h
-shld gr_stmono_addr
-push d
-
+    pop     d
+    pop     h
+    shld    y_str
+    pop     h
+    shld    x_str
+    pop     h
+    shld    gr_stmono_addr
+    push    d
 ; xk <= xl
-lhld x_str
-shld xl
-shld xk
-
-lhld y_str
-shld yl
-
+    lhld    x_str
+    shld    xl
+    shld    xk
+    lhld    y_str
+    shld    yl
 ; index <= -1
-mvi a,$FF
-sta gr_stmono_index
-
+    mvi     a,$FF
+    sta     gr_stmono_index
 gr_stmono_cycle:
-
 ; IF (index+1 == len) -> ret
-lhld gr_stmono_addr
-lda gr_stmono_index
-inr a
-sta gr_stmono_index
-cmp m
-rz
-
+    lhld    gr_stmono_addr
+    lda     gr_stmono_index
+    inr     a
+    sta     gr_stmono_index
+    cmp     m
+    rz
 ; Получаем код символа
 ; A <= M(addr+index+1)
-inr a
-add l
-mov l,a
-mvi a,$00
-adc h
-mov h,a
-mov a,m
-
-sta now_sym
-call WRSYM_inside
+    inr     a
+    add     l
+    mov     l,a
+    mvi     a,$00
+    adc     h
+    mov     h,a
+    mov     a,m
+    sta     now_sym
+    call    WRSYM_inside
 ; IF (wrsym error) -> ret
-;rc
-
+    ;rc
 ; xl += hor_sym + gap_const - 1
-lhld xl
-lda gap_const
-mov b,a
-lda hor_sym
-dcr a
-add b
-add l
-mov l,a
-mvi a,$00
-adc h
-mov h,a
-shld xl
-jmp gr_stmono_cycle
+    lhld    xl
+    lda     gap_const
+    mov     b,a
+    lda     hor_sym
+    dcr     a
+    add     b
+    add     l
+    mov     l,a
+    mvi     a,$00
+    adc     h
+    mov     h,a
+    shld    xl
+    jmp     gr_stmono_cycle
 
 
 
@@ -923,163 +890,156 @@ jmp gr_stmono_cycle
 
 
 GR_LINE:
-pop d
-pop h
-shld y1_line
-pop h
-shld x1_line
-pop h
-shld y0_line
-pop h
-shld x0_line
-push d
-
+    pop     d
+    pop     h
+    shld    y1_line
+    pop     h
+    shld    x1_line
+    pop     h
+    shld    y0_line
+    pop     h
+    shld    x0_line
+    push    d
 GR_LINE_inside:
-
 ; set var_err
-lxi h,$0000
-shld var_err
-
+    lxi     h,$0000
+    shld    var_err
 ; settings x
-lhld x0_line
-shld x
-xchg
-lhld x1_line
-call SUB16
-mov a,h
-ora a
-lxi b,$0001
-jp gr_line_1
-dcx b
-dcx b
-call ABS
+    lhld    x0_line
+    shld    x
+    xchg
+    lhld    x1_line
+    call    SUB16
+    mov     a,h
+    ora     a
+    lxi     b,$0001
+    jp      gr_line_1
+    dcx     b
+    dcx     b
+    call ABS
 gr_line_1:
-shld dx
-ora a
-mov a,h
-rar
-mov h,a
-mov a,l
-rar
-mov l,a
-shld dx_puoli
-mov h,b
-mov l,c
-shld xplus
-
+    shld    dx
+    ora     a
+    mov     a,h
+    rar
+    mov     h,a
+    mov     a,l
+    rar
+    mov     l,a
+    shld    dx_puoli
+    mov     h,b
+    mov     l,c
+    shld    xplus
 ; settings y
-lhld y0_line
-shld y
-xchg
-lhld y1_line
-call SUB16
-mov a,h
-ora a
-lxi b,$0001
-jp gr_line_2
-dcx b
-dcx b
-call ABS
+    lhld    y0_line
+    shld    y
+    xchg
+    lhld    y1_line
+    call    SUB16
+    mov     a,h
+    ora     a
+    lxi     b,$0001
+    jp      gr_line_2
+    dcx     b
+    dcx     b
+    call    ABS
 gr_line_2:
-shld dy
-ora a
-mov a,h
-rar
-mov h,a
-mov a,l
-rar
-mov l,a
-shld dy_puoli
-mov h,b
-mov l,c
-shld yplus
-
+    shld    dy
+    ora     a
+    mov     a,h
+    rar
+    mov     h,a
+    mov     a,l
+    rar
+    mov     l,a
+    shld    dy_puoli
+    mov     h,b
+    mov     l,c
+    shld    yplus
 ; IF (dy/dx) >= 1 -> yrun
 ; Else -> xrun
-lhld dx
-xchg
-lhld dy
-call CMP16
+    lhld    dx
+    xchg
+    lhld    dy
+    call    CMP16
 ; IF (dy >= dx)
-jnc gr_line_yrun
-
+    jnc     gr_line_yrun
 gr_line_xrun:
-call PRINT_DOT
-; IF (x == x1) -> ret
-lhld x
-xchg
-lhld x1_line
-call CMP16
-rz
+    call    PRINT_DOT
+    ; IF (x == x1) -> ret
+    lhld    x
+    xchg
+    lhld    x1_line
+    call    CMP16
+    rz
 ; x += xplus
-lhld xplus
-dad d
-shld x
+    lhld    xplus
+    dad     d
+    shld    x
 ; var_err += dy
-lhld var_err
-xchg
-lhld dy
-dad d
-shld var_err
+    lhld    var_err
+    xchg
+    lhld    dy
+    dad     d
+    shld    var_err
 ; IF (var_err < dx_puoli) -> xrun
-xchg
-lhld dx_puoli
-xchg
-call CMP16
-jm gr_line_xrun
+    xchg
+    lhld    dx_puoli
+    xchg
+    call    CMP16
+    jm      gr_line_xrun
 ; Else
 ; y += yplus
 ; var_err -= dx
-xchg
-lhld dx
-xchg
-call SUB16
-shld var_err
-lhld yplus
-xchg
-lhld y
-dad d
-shld y
-jmp gr_line_xrun
-
+    xchg
+    lhld    dx
+    xchg
+    call    SUB16
+    shld    var_err
+    lhld    yplus
+    xchg
+    lhld    y
+    dad     d
+    shld    y
+    jmp     gr_line_xrun
 gr_line_yrun:
-call PRINT_DOT
+    call    PRINT_DOT
 ; IF (y == y1) -> ret
-lhld y
-xchg
-lhld y1_line
-call CMP16
-rz
+    lhld    y
+    xchg
+    lhld    y1_line
+    call    CMP16
+    rz
 ; y += yplus
-lhld yplus
-dad d
-shld y
+    lhld    yplus
+    dad     d
+    shld    y
 ; var_err += dx
-lhld var_err
-xchg
-lhld dx
-dad d
-shld var_err
+    lhld    var_err
+    xchg
+    lhld    dx
+    dad     d
+    shld    var_err
 ; IF (var_err < dy_puoli) -> yrun
-xchg
-lhld dy_puoli
-xchg
-call CMP16
-jm gr_line_yrun
+    xchg
+    lhld    dy_puoli
+    xchg
+    call    CMP16
+    jm      gr_line_yrun
 ; Else
 ; x += xplus
 ; var_err -= dy
-xchg
-lhld dy
-xchg
-call SUB16
-shld var_err
-lhld xplus
-xchg
-lhld x
-dad d
-shld x
-jmp gr_line_yrun
+    xchg
+    lhld    dy
+    xchg
+    call    SUB16
+    shld    var_err
+    lhld    xplus
+    xchg
+    lhld    x
+    dad     d
+    shld    x
+    jmp     gr_line_yrun
 
 
 ;
@@ -1133,46 +1093,40 @@ jmp gr_line_yrun
 ; Начало кода:
 
 GR_CIRCLE:
-pop d
-pop h
-shld radius
-pop h
-shld y_circle
-pop h
-shld x_circle
-push d
-
+    pop     d
+    pop     h
+    shld    radius
+    pop     h
+    shld    y_circle
+    pop     h
+    shld    x_circle
+    push    d
 ; x_sector = 0
-lxi h,$0000
-shld x_sector
+    lxi     h,$0000
+    shld    x_sector
 ; y_sector = R
-lhld radius
-call ABS
-shld y_sector
-
+    lhld    radius
+    call    ABS
+    shld    y_sector
 ; I sector of circle
-lxi h,$0001
-shld xplus
-lxi h,$FFFF
-shld yplus
-call sector
-
+    lxi     h,$0001
+    shld    xplus
+    lxi     h,$FFFF
+    shld    yplus
+    call    sector
 ; IV sector of circle
-lxi h,$FFFF
-shld xplus
-call sector
-
+    lxi     h,$FFFF
+    shld    xplus
+    call    sector
 ; III sector of circle
-lxi h,$0001
-shld yplus
-call sector
-
+    lxi     h,$0001
+    shld    yplus
+    call    sector
 ; II sector of circle
-lxi h,$0001
-shld xplus
-call sector
-
-ret
+    lxi     h,$0001
+    shld    xplus
+    call    sector
+    ret
 
 ; x_circle
 ; y_circle
@@ -1191,147 +1145,132 @@ ret
 
 sector:
 ; r_quar = R^2
-lhld radius
-mov d,h
-mov e,l
-call MUL16
-shld r_quar
-
+    lhld    radius
+    mov     d,h
+    mov     e,l
+    call    MUL16
+    shld    r_quar
 sector_cycle:
 ; x_and_xplus_quar
-lhld x_sector
-xchg
-lhld xplus
-dad d
-mov d,h
-mov e,l
-call MUL16
-shld x_and_xplus_quar
-
+    lhld x_sector
+    xchg
+    lhld xplus
+    dad d
+    mov     d,h
+    mov     e,l
+    call    MUL16
+    shld    x_and_xplus_quar
 ; y_and_xplus_quar
-lhld y_sector
-xchg
-lhld yplus
-dad d
-mov d,h
-mov e,l
-call MUL16
-shld y_and_xplus_quar
-
+    lhld    y_sector
+    xchg
+    lhld    yplus
+    dad     d
+    mov     d,h
+    mov     e,l
+    call    MUL16
+    shld    y_and_xplus_quar
 ; sector_ph = |x_and_xplus_quar + y*y - r_quar|
-lhld y_sector
-mov d,h
-mov e,l
-call MUL16
-xchg
-lhld x_and_xplus_quar
-dad d
-xchg
-lhld r_quar
-xchg
-call SUB16
-call ABS
-shld sector_ph
-
+    lhld    y_sector
+    mov     d,h
+    mov     e,l
+    call    MUL16
+    xchg
+    lhld    x_and_xplus_quar
+    dad     d
+    xchg
+    lhld    r_quar
+    xchg
+    call    SUB16
+    call    ABS
+    shld    sector_ph
 ; sector_pd = |x_and_xplus_quar + y_and_xplus_quar - r_quar|
-lhld x_and_xplus_quar
-xchg
-lhld y_and_xplus_quar
-dad d
-xchg
-lhld r_quar
-xchg
-call SUB16
-call ABS
-shld sector_pd
-
+    lhld    x_and_xplus_quar
+    xchg
+    lhld    y_and_xplus_quar
+    dad     d
+    xchg
+    lhld    r_quar
+    xchg
+    call    SUB16
+    call    ABS
+    shld    sector_pd
 ; sector_pv = |x*x + y_and_xplus_quar - r_quar|
-lhld x_sector
-mov d,h
-mov e,l
-call MUL16
-xchg
-lhld y_and_xplus_quar
-dad d
-xchg
-lhld r_quar
-xchg
-call SUB16
-call ABS
-shld sector_pv
-
-lhld sector_pd
-xchg
-lhld sector_ph
-call CMP16
-jnc sector_1
+    lhld    x_sector
+    mov     d,h
+    mov     e,l
+    call    MUL16
+    xchg
+    lhld    y_and_xplus_quar
+    dad     d
+    xchg
+    lhld    r_quar
+    xchg
+    call    SUB16
+    call    ABS
+    shld    sector_pv
+    lhld    sector_pd
+    xchg
+    lhld    sector_ph
+    call    CMP16
+    jnc     sector_1
 ; -IF (ph < pd)
-
-xchg
-lhld sector_pv
-xchg
-call CMP16
-jnc sector_2
+    xchg
+    lhld    sector_pv
+    xchg
+    call    CMP16
+    jnc     sector_2
 ; IF (ph < pv)
-lhld x_sector
-xchg
-lhld xplus
-dad d
-shld x_sector
-jmp sector_4
-
+    lhld    x_sector
+    xchg
+    lhld    xplus
+    dad     d
+    shld    x_sector
+    jmp     sector_4
 sector_2:
 ; Else
-lhld y_sector
-xchg
-lhld yplus
-dad d
-shld y_sector
-jmp sector_4
-
+    lhld    y_sector
+    xchg
+    lhld    yplus
+    dad     d
+    shld    y_sector
+    jmp     sector_4
 sector_1:
 ; -IF (ph >= pd)
 ; DE - Pd
-lhld sector_pv
-xchg
-call CMP16
-jnc sector_2
-
-lhld x_sector
-xchg
-lhld xplus
-dad d
-shld x_sector
-jmp sector_2
-
+    lhld    sector_pv
+    xchg
+    call    CMP16
+    jnc     sector_2
+    lhld    x_sector
+    xchg
+    lhld    xplus
+    dad     d
+    shld    x_sector
+    jmp     sector_2
 sector_4:
 ; x = x_sector + x0
-lhld x_circle
-xchg
-lhld x_sector
-dad d
-shld x
-
+    lhld    x_circle
+    xchg
+    lhld    x_sector
+    dad     d
+    shld    x
 ; y = y_sector + y0
-lhld y_circle
-xchg
-lhld y_sector
-dad d
-shld y
-
-call PRINT_DOT
-
+    lhld    y_circle
+    xchg
+    lhld    y_sector
+    dad     d
+    shld    y
+    call    PRINT_DOT
 ; IF (x_sector == 0) or (y_sector == 0) -> out
-lhld x_sector
-mov a,l
-ora h
-rz
-lhld y_sector
-mov a,l
-ora h
-rz
-jmp sector_cycle
-
+    lhld    x_sector
+    mov     a,l
+    ora     h
+    rz
+    lhld    y_sector
+    mov     a,l
+    ora     h
+    rz
+    jmp     sector_cycle
 
 
 ;
@@ -1392,138 +1331,126 @@ jmp sector_cycle
 ; Начало кода:
 
 GR_FRAME:
-
 ; x0_frame
 ; x1_frame
 ; y0_frame
 ; y1_frame
-
-pop d
-pop h
-shld radius
-pop h
-shld y1_frame
-pop h
-shld x1_frame
-pop h
-shld y0_frame
-pop h
-shld x0_frame
-push d
-
+    pop     d
+    pop     h
+    shld    radius
+    pop     h
+    shld    y1_frame
+    pop     h
+    shld    x1_frame
+    pop     h
+    shld    y0_frame
+    pop     h
+    shld    x0_frame
+    push    d
 ; Предустановка x_sector & y_sector
 ; x_sector = 0
 ; y_sector = R
-
-lxi h,$0000
-shld x_sector
-lhld radius
-call ABS
-shld y_sector
-
+    lxi     h,$0000
+    shld    x_sector
+    lhld    radius
+    call    ABS
+    shld    y_sector
 ; Рисуем сектор I(IV)
 ; x_circle = (x1-R)
 ; y_circle = (y1-R)
 ; xplus = 1
 ; yplus = -1
-lhld radius
-xchg
-lhld x1_frame
-call SUB16
-shld x_circle
-lhld radius
-xchg
-lhld y1_frame
-call SUB16
-shld y_circle
-lxi h,$0001
-shld xplus
-lxi h,$FFFF
-shld yplus
-call sector
-
+    lhld    radius
+    xchg
+    lhld    x1_frame
+    call    SUB16
+    shld    x_circle
+    lhld    radius
+    xchg
+    lhld    y1_frame
+    call    SUB16
+    shld    y_circle
+    lxi     h,$0001
+    shld    xplus
+    lxi     h,$FFFF
+    shld    yplus
+    call    sector
 ; Рисуем сектор IV(I)
 ; x_circle = (x1-R)
 ; y_circle = (y0+R)
 ; xplus = -1
 ; yplus = -1
-lhld radius
-xchg
-lhld y0_frame
-dad d
-shld y_circle
-lxi h,$FFFF
-shld xplus
-call sector
-
+    lhld    radius
+    xchg
+    lhld    y0_frame
+    dad     d
+    shld    y_circle
+    lxi     h,$FFFF
+    shld    xplus
+    call    sector
 ; Рисуем сектор III(II)
 ; x_circle = (x0+R)
 ; y_circle = (y0+R)
 ; xplus = -1
 ; yplus = 1
-lhld radius
-xchg
-lhld x0_frame
-dad d
-shld x_circle
-lxi h,$0001
-shld yplus
-call sector
-
+    lhld    radius
+    xchg
+    lhld    x0_frame
+    dad     d
+    shld    x_circle
+    lxi     h,$0001
+    shld    yplus
+    call    sector
 ; Рисуем сектор II(III)
 ; x_circle = (x0+R)
 ; y_circle = (y1-R)
 ; xplus = 1
 ; yplus = 1
-lhld radius
-xchg
-lhld y1_frame
-call SUB16
-shld y_circle
-lxi h,$0001
-shld xplus
-call sector
-
+    lhld    radius
+    xchg
+    lhld    y1_frame
+    call    SUB16
+    shld    y_circle
+    lxi     h,$0001
+    shld    xplus
+    call    sector
 ; line((x1-R);y1)((x0+R);y1)
-lhld radius
-xchg
-lhld x1_frame
-call SUB16
-shld x0_line
-lhld radius
-xchg
-lhld x0_frame
-dad d
-shld x1_line
-lhld y1_frame
-shld y0_line
-shld y1_line
-call GR_LINE_inside
-
+    lhld    radius
+    xchg
+    lhld    x1_frame
+    call    SUB16
+    shld    x0_line
+    lhld    radius
+    xchg
+    lhld    x0_frame
+    dad d
+    shld    x1_line
+    lhld    y1_frame
+    shld    y0_line
+    shld    y1_line
+    call    GR_LINE_inside
 ; line((x1-R);y0)((x0+R+1);y0)
-lhld y0_frame
-shld y0_line
-shld y1_line
-call GR_LINE_inside
-
+    lhld    y0_frame
+    shld    y0_line
+    shld    y1_line
+    call    GR_LINE_inside
 ; line(x0;(y1-R))(x0;(y0+R))
-lhld radius
-xchg
-lhld y1_frame
-call SUB16
-shld y0_line
-lhld radius
-xchg
-lhld y0_frame
-dad d
-shld y1_line
-lhld x0_frame
-shld x0_line
-shld x1_line
-call GR_LINE_inside
-
+    lhld    radius
+    xchg
+    lhld    y1_frame
+    call    SUB16
+    shld    y0_line
+    lhld    radius
+    xchg
+    lhld    y0_frame
+    dad     d
+    shld    y1_line
+    lhld    x0_frame
+    shld    x0_line
+    shld    x1_line
+    call    GR_LINE_inside
 ; line(x1;(y1-R))(x1;(y0+R))
-lhld x1_frame
-shld x0_line
-shld x1_line
-jmp GR_LINE_inside
+    lhld    x1_frame
+    shld    x0_line
+    shld    x1_line
+    jmp     GR_LINE_inside
